@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Розыгрыш ВКонтакте</title>
+<style>
+body { font-family: Arial, sans-serif; padding: 20px; }
+h1 { color: #4CAF50; }
+input { padding: 8px; width: 200px; }
+button { padding: 8px 12px; margin-left: 10px; }
+ul { list-style: none; padding: 0; }
+li { padding: 5px 0; }
+</style>
+</head>
+<body>
+<h1>Проведение розыгрыша ВКонтакте</h1>
+<p>Введите ID группы или короткое имя:</p>
+<input type="text" id="groupId" placeholder="например, mygroup" />
+<button onclick="getParticipants()">Получить участников</button>
+<h2>Участники:</h2>
+<ul id="participants"></ul>
 
+<script>
+const accessToken = 'ВАШ_ТОКЕН_ДОСТУПА'; // Замените на ваш токен
+
+function getParticipants() {
+    const group = document.getElementById('groupId').value.trim();
+    if (!group) {
+        alert('Пожалуйста, введите ID группы или короткое имя.');
+        return;
+    }
+    document.getElementById('participants').innerHTML = 'Загрузка...';
+
+    const url = `https://api.vk.com/method/groups.getMembers?group_id=${group}&access_token=${accessToken}&v=5.131`;
+
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            if (data.response) {
+                displayParticipants(data.response.items);
+            } else {
+                document.getElementById('participants').innerHTML = 'Ошибка: ' + data.error.error_msg;
+            }
+        })
+        .catch(error => {
+            document.getElementById('participants').innerHTML = 'Ошибка при получении данных.';
+            console.error(error);
+        });
+}
+
+function displayParticipants(users) {
+    const list = document.getElementById('participants');
+    list.innerHTML = '';
+    users.for}
